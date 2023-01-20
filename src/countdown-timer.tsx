@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 const formatDate = (dateObject) => {
   const minutes = dateObject.getMinutes();
@@ -10,31 +10,29 @@ const formatDate = (dateObject) => {
 export default function CountdownTimer() {
   const fiveMinutes = new Date(0, 0, 0, 0, 5);
   const [timeRemaining, setTimeRemaining] = useState(fiveMinutes);
-  const [intervalId, setIntervalId] = useState<number | null>(null);
+  const intervalId = useRef<number | null>(null);
 
   const handleClickStart = () => {
-    const intervalId = window.setInterval(() => {
+    intervalId.current = window.setInterval(() => {
       setTimeRemaining(
         (prevTimeRemaining) => new Date(prevTimeRemaining.getTime() - 1000)
       );
     }, 1000);
-
-    setIntervalId(intervalId);
   };
 
   const handleClickStop = () => {
     // If the timer is already stopped, do nothing
-    if (intervalId === null) {
+    if (intervalId.current === null) {
       return;
     }
 
-    clearInterval(intervalId);
-    setIntervalId(null);
+    clearInterval(intervalId.current);
+    intervalId.current = null;
   };
 
   const handleReset = () => {
-    if (intervalId !== null) {
-      clearInterval(intervalId);
+    if (intervalId.current !== null) {
+      clearInterval(intervalId.current);
     }
     setTimeRemaining(fiveMinutes);
   };
