@@ -13,6 +13,11 @@ export default function CountdownTimer() {
   const intervalId = useRef<number | null>(null);
 
   const handleClickStart = () => {
+    // If a timer is already running, do not start another one
+    if (intervalId.current !== null) {
+      return;
+    }
+
     intervalId.current = window.setInterval(() => {
       setTimeRemaining(
         (prevTimeRemaining) => new Date(prevTimeRemaining.getTime() - 1000)
