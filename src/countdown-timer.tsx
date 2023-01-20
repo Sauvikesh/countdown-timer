@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 
 const formatDate = (dateObject) => {
   const minutes = dateObject.getMinutes();
@@ -36,6 +36,14 @@ export default function CountdownTimer() {
     }
     setTimeRemaining(fiveMinutes);
   };
+
+  useEffect(() => {
+    return () => {
+      if (intervalId.current !== null) {
+        clearInterval(intervalId.current);
+      }
+    };
+  }, []);
 
   return (
     <div style={{ textAlign: "center" }}>
